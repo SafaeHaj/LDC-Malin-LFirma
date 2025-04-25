@@ -12,6 +12,12 @@ services:
       - backend
     volumes:
       - ./Frontend/src:/usr/src/app/src
+  
+  model:
+    container_name: model
+    networks:
+      - my_network
+    build: ./AI_Model
   db:
     container_name: postgres
     networks:
