@@ -1,0 +1,51 @@
+services:
+  frontend:
+    container_name: frontend
+    build:
+        context: ./Frontend
+    networks:
+      - my_network
+    ports:
+      - 5173:5173
+    restart: on-failure
+    depends_on:
+      - backend
+    volumes:
+      - ./Frontend/src:/usr/src/app/src
+  db:
+    container_name: postgres
+    networks:
+      - my_network
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=1234
+    volumes:
+      - Database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-h", "db"]
+    restart: always
+  backend:
+    container_name: backend
+    networks:
+      - my_network
+    environment:
+      - DB_NAME=postgres
+      - DB_USER=user
+      - DB_PASSWORD=1234
+    build: ./Backend
+    volumes:
+      - ./Backend:/usr/src/app
+    depends_on:
+      - db
+
+networks:
+  my_network:
+    driver: bridge
+
+volumes:
+  Database:
+
+
+
