@@ -1,0 +1,11 @@
+keras
+numpy
+matplotlib
+streamlit
+opencv_python_headless
+tensorflow
+scikit-learn
+kagglehub
+dill
+flask
+ultralytics
