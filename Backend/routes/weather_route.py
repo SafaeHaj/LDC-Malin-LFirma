@@ -3,7 +3,7 @@ from predictors.weather_predictor import predict as weather_predict
 
 weather_bp = Blueprint('weather', __name__)
 
-@weather_bp.route('/weather', methods=['POST'])
+@weather_bp.route('/api/weather', methods=['POST'])
 def predict_weather():
     try:
         data = request.get_json()

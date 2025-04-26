@@ -11,7 +11,7 @@ def get_soil_params(data):
         'soil_moisture': data.get('soil_moisture'),
     }
 
-@soil_bp.route('/predict/soil', methods=['GET'])
+@soil_bp.route('/api/predict/soil', methods=['GET'])
 def predict_soil():
     data = get_latest()
     sensor_data = get_soil_params(data)

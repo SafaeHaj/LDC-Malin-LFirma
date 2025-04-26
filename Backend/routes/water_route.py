@@ -12,7 +12,7 @@ def get_water_params(data):
         'pump_status': data.get('pump_status'),
     }
     
-@water_bp.route('/predict/watertank', methods=['POST'])
+@water_bp.route('/api/predict/watertank', methods=['POST'])
 def predict_watertank():
     data = get_latest()
     water_data = get_water_params(data)

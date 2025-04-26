@@ -3,7 +3,7 @@ from predictors.plant_predictor import predict as plant_predict, provide_tip, Pl
 
 plant_bp = Blueprint('plant', __name__)
 
-@plant_bp.route('/predict/plant', methods=['POST'])
+@plant_bp.route('/api/predict/plant', methods=['POST'])
 def predict_plant():
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
