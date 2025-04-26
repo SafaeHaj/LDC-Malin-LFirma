@@ -2,7 +2,7 @@ import threading
 import serial
 import time
 import json
-from db.data_writer import write_all
+from ..Backend.db.data_writer import write_all
 
 _latest = None
 _lock = threading.Lock()
