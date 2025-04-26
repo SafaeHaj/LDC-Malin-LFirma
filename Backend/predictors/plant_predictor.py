@@ -1,30 +1,39 @@
-
-from flask import Flask, request, jsonify
+from flask import abort
 import numpy as np
 import cv2
 from keras.models import load_model
-import tensorflow as tf
+from ultralytics import YOLO
 import json
 
 model = load_model('plant_disease_model.h5')
+yolo_model = YOLO('yolov8n.pt')
 CLASS_NAMES = ('Tomato___Septoria_leaf_spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___healthy')
 
-with open("../assets/plant_tips.json", "r") as file:
-    tips_data = json.load(file)
-    
-tips = {name: tips_data[name] for name in tips_data}
+with open('../assets/plant_tips.json', 'r') as f:
+    tips = json.load(f)
+
+class PlantDetectionError(Exception):
+    pass
 
 def prepare_image(image_bytes):
-    file_bytes = np.asarray(bytearray(image_bytes), dtype=np.uint8)
-    opencv_image = cv2.imdecode(file_bytes, 1)
-    opencv_image = cv2.resize(opencv_image, (256, 256))
-    opencv_image = opencv_image.reshape(1, 256, 256, 3)
-    return opencv_image
+    arr = np.frombuffer(image_bytes, np.uint8)
+    img = cv2.imdecode(arr, cv2.IMREAD_COLOR)
+    img = cv2.resize(img, (256, 256))
+    return img.reshape(1, 256, 256, 3)
+
+def sanity_check(image_array, threshold=0.3):
+    results = yolo_model.predict(source=image_array, verbose=False)
+    r = results[0]
+    confs = r.boxes.conf if hasattr(r.boxes, 'conf') else []
+    if len(confs) == 0 or float(confs.max()) < threshold:
+        raise PlantDetectionError('No plant detected')
 
 def predict(image_bytes):
-    image = prepare_image(image_bytes)
-    prediction = model.predict(image)
-    return CLASS_NAMES[np.argmax(prediction)]
+    img = prepare_image(image_bytes)
+    sanity_check(img)
+    preds = model.predict(img)
+    confidence = preds.max()
+    return CLASS_NAMES[int(np.argmax(preds))], confidence
 
-def provide_tip(name): 
-    return tips[name]
+def provide_tip(name):
+    return tips.get(name, '')

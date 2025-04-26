@@ -8,3 +8,4 @@ scikit-learn
 kagglehub
 dill
 flask
+ultralytics

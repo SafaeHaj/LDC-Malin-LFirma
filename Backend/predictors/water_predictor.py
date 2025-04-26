@@ -1,8 +1,7 @@
 # water_predictor.py
 import numpy as np
 from keras.models import load_model
-from data_loader import load_data_from_db
-from connect_postgres import connect_to_db
+from db.connect_postgres import connect_to_db
 from sqlalchemy import text
 
 model = load_model('water_model.h5')

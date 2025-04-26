@@ -1,21 +1,21 @@
 # soil_predictor.py
 import numpy as np
 from datetime import datetime
-from connect_postgres import connect_to_db, text
+from db.connect_postgres import connect_to_db, text
 
-def get_db_data(sensor_data):
+def get_db_data(sensor_id):
     with connect_to_db() as conn:
         result = conn.execute(
             text(
                 "SELECT watered_at, tank_level FROM watering_log "
-                "WHERE sensor_id = :sid ORDER BY watered_at DESC LIMIT 1"
+                "WHERE watered_at > NOW() - INTERVAL '24 HOURS' "
             ),
-            {"sid": sensor_data.get("sensor_id")}
+            {"sid": sensor_id}
     ).fetchone()
     return result
     
 def predict(sensor_data):
-    moisture = sensor_data["moisture"]
+    moisture = sensor_data["soil_moisture"]
     temperature = sensor_data["temperature"]
     humidity = sensor_data["humidity"]
     now = datetime.now(datetime.timezone.utc)
