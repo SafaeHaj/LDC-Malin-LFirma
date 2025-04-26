@@ -26,6 +26,15 @@ services:
       resources:
         limits:
           memory: 2G
+  soil:
+    container_name: soil
+    networks:
+      - my_network
+    build: ./Soil_Model
+    deploy:
+      resources:
+        limits:
+          memory: 512M
   
   db:
     container_name: postgres
