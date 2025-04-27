@@ -14,21 +14,26 @@ services:
       - ./Frontend/src:/usr/src/app/src
   backend:
     container_name: backend
+    restart: always
     networks:
       - my_network
     environment:
       - DB_NAME=postgres
       - DB_USER=user
       - DB_PASSWORD=1234
-    build: ./Backend
+      - NVIDIA_VISIBLE_DEVICES=all
+    build: 
+      context: .
+      dockerfile: Backend/dockerfile
     volumes:
-      - ./Backend:/usr/src/app
+      - .:/usr/src/app
     depends_on:
       - db
     deploy:
       resources:
-        limits:
-          memory: 1G
+        reservations:
+          devices:
+            - capabilities: [gpu]
   db:
     container_name: postgres
     networks:

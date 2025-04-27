@@ -1,6 +1,10 @@
-# numpy
-# opencv-python-headless
-# onnxruntime
-# h5py
+numpy
+pandas
+tensorflow
+keras
+opencv2
+opencv-python
+opencv-python-headless
+ultralytics
 flask
 flask-cors
