@@ -8,6 +8,7 @@ API_KEY = os.getenv("API_KEY")
 BASE_URL = "http://api.weatherapi.com/v1/forecast.json"
 
 def get_weather(city_name):
+    print(API_KEY)
     params = {
         "key": API_KEY,
         "q": city_name,
@@ -24,8 +25,7 @@ def get_weather(city_name):
         print(f"Error fetching weather data: {e}")
         return None
 
-def predict():
-    weather_data = get_weather("Benguerir")
+def predict(weather_data):
     if not weather_data:
         return None
 

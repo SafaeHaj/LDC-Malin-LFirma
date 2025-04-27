@@ -1,16 +1,16 @@
 from flask import Blueprint, request, jsonify
-from predictors.weather_predictor import predict as weather_predict
+from predictors.weather_predictor import predict, get_weather
 
 weather_bp = Blueprint('weather', __name__)
 
-@weather_bp.route('/api/weather', methods=['POST'])
+@weather_bp.route('/api/weather', methods=['GET'])
 def predict_weather():
     try:
-        data = request.get_json()
+        data = get_weather("Benguerir")
         if not data:
             return jsonify({"error": "No data provided"}), 400
         
-        prediction = weather_predict(data)
+        prediction = predict(data)
         return jsonify({"prediction": prediction}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500

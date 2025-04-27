@@ -2,7 +2,7 @@ services:
   frontend:
     container_name: frontend
     build:
-        context: ./Frontend
+      context: ./Frontend
     networks:
       - my_network
     ports:
@@ -12,10 +12,23 @@ services:
       - backend
     volumes:
       - ./Frontend/src:/usr/src/app/src
+  backend:
+    container_name: backend
+    networks:
+      - my_network
+    environment:
+      - DB_NAME=postgres
+      - DB_USER=user
+      - DB_PASSWORD=1234
+    build: ./Backend
+    volumes:
+      - ./Backend:/usr/src/app
+    depends_on:
+      - db
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 1G
   db:
     container_name: postgres
     networks:
@@ -39,24 +52,6 @@ services:
       resources:
         limits:
           memory: 1G
-  
-  backend:
-    container_name: backend
-    networks:
-      - my_network
-    environment:
-      - DB_NAME=postgres
-      - DB_USER=user
-      - DB_PASSWORD=1234
-    build: ./Backend
-    volumes:
-      - ./Backend:/usr/src/app
-    depends_on:
-      - db
-    deploy:
-      resources:
-        limits:
-          memory: 1G
 
 networks:
   my_network:
@@ -64,6 +59,3 @@ networks:
 
 volumes:
   Database:
-
-
-

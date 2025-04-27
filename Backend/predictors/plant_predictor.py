@@ -1,11 +1,19 @@
-from flask import abort
+from pathlib import Path
 import numpy as np
 import cv2
 from keras.models import load_model
 from ultralytics import YOLO
 import json
 
-model = load_model('plant_disease_model.h5')
+
+BASE_DIR   = Path(__file__).resolve().parent.parent
+MODEL_DIR  = BASE_DIR / 'models'
+ASSET_DIR  = BASE_DIR / 'assets'
+
+MODEL_PATH = MODEL_DIR / 'plant_disease_model.h5'
+
+model = load_model(MODEL_PATH)
+
 yolo_model = YOLO('yolov8n.pt')
 CLASS_NAMES = ('Tomato___Septoria_leaf_spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___healthy')
 

@@ -1,14 +1,14 @@
 from flask import Flask
-from routes.plant_route import plant_bp
-from routes.soil_route import soil_bp
-from routes.water_route import water_bp
+
 from routes.weather_route import weather_bp
-from connect_postgres import connect_to_db
+from db.connect_postgres import connect_to_db
+from flask_cors import CORS
 
 app = Flask(__name__)
-app.register_blueprint(plant_bp)
-app.register_blueprint(soil_bp)
-app.register_blueprint(water_bp)
+CORS(app)
+# app.register_blueprint(plant_bp)
+# app.register_blueprint(soil_bp)
+# app.register_blueprint(water_bp)
 app.register_blueprint(weather_bp)
 
 

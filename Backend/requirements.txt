@@ -1,11 +1,6 @@
-keras
-numpy
-matplotlib
-streamlit
-opencv_python_headless
-tensorflow
-scikit-learn
-kagglehub
-dill
+# numpy
+# opencv-python-headless
+# onnxruntime
+# h5py
 flask
-ultralytics
+flask-cors
